@@ -20,7 +20,8 @@ app.use('/vendor/xterm', express.static(path.join(WORKSPACE_ROOT, 'node_modules/
 app.use('/vendor/xterm-addon-fit', express.static(path.join(WORKSPACE_ROOT, 'node_modules/xterm-addon-fit')));
 app.use('/vendor/codicons', express.static(path.join(WORKSPACE_ROOT, 'node_modules/@vscode/codicons/dist')));
 
-// Serve client app
+// Serve root and public assets
+app.use(express.static(WORKSPACE_ROOT));
 app.use(express.static(path.join(WORKSPACE_ROOT, 'public')));
 
 // Safe path resolution
