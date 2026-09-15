@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster Pro - Modern Productivity App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-bolt"></i>
+                <h2>TaskMaster</h2>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-filter="all">
+                    <i class="fa-solid fa-inbox"></i> All Tasks
+                    <span class="badge" id="count-all">0</span>
+                </button>
+                <button class="nav-item" data-filter="today">
+                    <i class="fa-regular fa-calendar-day"></i> Today
+                    <span class="badge" id="count-today">0</span>
+                </button>
+                <button class="nav-item" data-filter="important">
+                    <i class="fa-regular fa-star"></i> Important
+                    <span class="badge" id="count-important">0</span>
+                </button>
+                <button class="nav-item" data-filter="completed">
+                    <i class="fa-solid fa-circle-check"></i> Completed
+                    <span class="badge" id="count-completed">0</span>
+                </button>
+            </nav>
+            <div class="categories-section">
+                <h3>PROJECTS</h3>
+                <ul class="category-list">
+                    <li><span class="dot work"></span> Work</li>
+                    <li><span class="dot personal"></span> Personal</li>
+                    <li><span class="dot coding"></span> Coding</li>
+                </ul>
+            </div>
+            <div class="theme-switch-wrapper">
+                <button id="theme-btn" class="theme-btn">
+                    <i class="fa-solid fa-moon"></i> Dark Mode
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Task Board -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-info">
+                    <h1 id="current-view-title">All Tasks</h1>
+                    <p id="current-date" class="date-str"></p>
+                </div>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="task-search" placeholder="Search tasks...">
+                </div>
+            </header>
+
+            <!-- New Task Creator -->
+            <form id="task-form" class="task-input-card">
+                <input type="text" id="task-title-input" placeholder="Add a new task (press Enter)..." required>
+                <div class="form-row">
+                    <div class="form-left">
+                        <select id="task-category">
+                            <option value="Work">💼 Work</option>
+                            <option value="Personal">🏡 Personal</option>
+                            <option value="Coding">💻 Coding</option>
+                        </select>
+                        <select id="task-priority">
+                            <option value="low">🟢 Low</option>
+                            <option value="medium" selected>🟡 Medium</option>
+                            <option value="high">🔴 High</option>
+                        </select>
+                        <input type="date" id="task-due-date">
+                    </div>
+                    <button type="submit" class="btn-add"><i class="fa-solid fa-plus"></i> Add Task</button>
+                </div>
+            </form>
+
+            <!-- Stats Bar -->
+            <div class="stats-container">
+                <div class="stat-box">
+                    <span class="stat-num" id="stat-total">0</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num" id="stat-pending">0</span>
+                    <span class="stat-label">Pending</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num" id="stat-done">0</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+                <div class="stat-box progress-box">
+                    <div class="progress-info">
+                        <span>Progress</span>
+                        <span id="progress-pct">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task List Container -->
+            <div class="tasks-wrapper">
+                <ul id="task-list" class="task-list">
+                    <!-- Tasks injected by app.js -->
+                </ul>
+                <div id="empty-state" class="empty-state" style="display:none;">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    <h3>All tasks completed!</h3>
+                    <p>Enjoy your day or add a new task above.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
