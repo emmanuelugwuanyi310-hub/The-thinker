@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Studio Code - Web</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007acc' d='M70.5 5.5L46.8 28.2 25.5 12.1 6.5 21.8v56.4l19 9.7 21.3-16.1 23.7 22.7L93.5 83V17L70.5 5.5zM25.5 67.9L16.2 60.9V39.1l9.3-7v35.8zm45 10.3L46.8 54.5l23.7-23.7V78.2z'/></svg>">
+    <!-- Codicons -->
+    <link rel="stylesheet" href="/vendor/codicons/codicon.css">
+    <!-- Xterm CSS -->
+    <link rel="stylesheet" href="/vendor/xterm/css/xterm.css">
+    <!-- App CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="theme-dark">
+    <!-- Top Menu Bar -->
+    <header id="titlebar">
+        <div class="titlebar-left">
+            <div class="app-icon codicon codicon-vscode"></div>
+            <div class="menubar">
+                <div class="menu-item" data-menu="file">File
+                    <div class="menu-dropdown" id="dropdown-file">
+                        <div class="menu-row" data-action="new-file"><span>New File</span><kbd>Ctrl+N</kbd></div>
+                        <div class="menu-row" data-action="new-folder"><span>New Folder</span></div>
+                        <div class="menu-separator"></div>
+                        <div class="menu-row" data-action="save-file"><span>Save</span><kbd>Ctrl+S</kbd></div>
+                        <div class="menu-row" data-action="save-all"><span>Save All</span></div>
+                        <div class="menu-separator"></div>
+                        <div class="menu-row" data-action="close-editor"><span>Close Tab</span><kbd>Ctrl+W</kbd></div>
+                        <div class="menu-row" data-action="close-all-editors"><span>Close All</span></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-menu="edit">Edit
+                    <div class="menu-dropdown" id="dropdown-edit">
+                        <div class="menu-row" data-action="undo"><span>Undo</span><kbd>Ctrl+Z</kbd></div>
+                        <div class="menu-row" data-action="redo"><span>Redo</span><kbd>Ctrl+Y</kbd></div>
+                        <div class="menu-separator"></div>
+                        <div class="menu-row" data-action="find"><span>Find</span><kbd>Ctrl+F</kbd></div>
+                        <div class="menu-row" data-action="replace"><span>Replace</span><kbd>Ctrl+H</kbd></div>
+                        <div class="menu-separator"></div>
+                        <div class="menu-row" data-action="format-document"><span>Format Document</span><kbd>Shift+Alt+F</kbd></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-menu="selection">Selection
+                    <div class="menu-dropdown" id="dropdown-selection">
+                        <div class="menu-row" data-action="select-all"><span>Select All</span><kbd>Ctrl+A</kbd></div>
+                        <div class="menu-row" data-action="copy-line-down"><span>Copy Line Down</span><kbd>Shift+Alt+Down</kbd></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-menu="view">View
+                    <div class="menu-dropdown" id="dropdown-view">
+                        <div class="menu-row" data-action="command-palette"><span>Command Palette...</span><kbd>Ctrl+Shift+P</kbd></div>
+                        <div class="menu-row" data-action="quick-open"><span>Go to File...</span><kbd>Ctrl+P</kbd></div>
+                        <div class="menu-separator"></div>
+                        <div class="menu-row" data-action="toggle-sidebar"><span>Toggle Primary Side Bar</span><kbd>Ctrl+B</kbd></div>
+                        <div class="menu-row" data-action="toggle-terminal"><span>Toggle Terminal</span><kbd>Ctrl+`</kbd></div>
+                        <div class="menu-row" data-action="toggle-minimap"><span>Toggle Minimap</span></div>
+                        <div class="menu-row" data-action="toggle-wordwrap"><span>Toggle Word Wrap</span><kbd>Alt+Z</kbd></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-menu="run">Run
+                    <div class="menu-dropdown" id="dropdown-run">
+                        <div class="menu-row" data-action="run-code"><span>Run Active File</span><kbd>F5</kbd></div>
+                        <div class="menu-row" data-action="run-selection"><span>Run Selected Code</span><kbd>Ctrl+Enter</kbd></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-menu="terminal">Terminal
+                    <div class="menu-dropdown" id="dropdown-terminal">
+                        <div class="menu-row" data-action="new-terminal"><span>New Terminal</span><kbd>Ctrl+Shift+`</kbd></div>
+                        <div class="menu-row" data-action="clear-terminal"><span>Clear Terminal</span><kbd>Ctrl+K</kbd></div>
+                    </div>
+                </div>
+                <div class="menu-item" data-menu="help">Help
+                    <div class="menu-dropdown" id="dropdown-help">
+                        <div class="menu-row" data-action="welcome"><span>Welcome Page</span></div>
+                        <div class="menu-row" data-action="keyboard-shortcuts"><span>Keyboard Shortcuts</span><kbd>Ctrl+K Ctrl+S</kbd></div>
+                        <div class="menu-separator"></div>
+                        <div class="menu-row" data-action="about"><span>About VS Code Web</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="titlebar-center" id="quick-open-trigger">
+            <span class="codicon codicon-search"></span>
+            <span class="titlebar-search-text" id="workspace-title">The-thinker — Visual Studio Code</span>
+            <kbd>Ctrl+P</kbd>
+        </div>
+        <div class="titlebar-right">
+            <button class="icon-btn" id="btn-toggle-terminal-header" title="Toggle Terminal (Ctrl+`)"><span class="codicon codicon-terminal"></span></button>
+            <button class="icon-btn" id="btn-run-header" title="Run Code (F5)"><span class="codicon codicon-play"></span></button>
+            <div class="window-controls">
+                <span class="win-btn win-min"></span>
+                <span class="win-btn win-max"></span>
+                <span class="win-btn win-close"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div id="workbench">
+        <!-- Activity Bar (Leftmost icons) -->
+        <aside id="activitybar">
+            <div class="activity-top">
+                <div class="activity-icon active" data-view="explorer" title="Explorer (Ctrl+Shift+E)">
+                    <i class="codicon codicon-files"></i>
+                    <div class="badge-indicator" id="explorer-badge" style="display:none;"></div>
+                </div>
+                <div class="activity-icon" data-view="search" title="Search (Ctrl+Shift+F)">
+                    <i class="codicon codicon-search"></i>
+                </div>
+                <div class="activity-icon" data-view="scm" title="Source Control (Ctrl+Shift+G)">
+                    <i class="codicon codicon-source-control"></i>
+                    <div class="badge-indicator" id="git-badge" style="display:none;">0</div>
+                </div>
+                <div class="activity-icon" data-view="run" title="Run and Debug (Ctrl+Shift+D)">
+                    <i class="codicon codicon-debug-alt"></i>
+                </div>
+                <div class="activity-icon" data-view="extensions" title="Extensions (Ctrl+Shift+X)">
+                    <i class="codicon codicon-extensions"></i>
+                </div>
+            </div>
+            <div class="activity-bottom">
+                <div class="activity-icon" id="activity-settings" title="Manage / Settings">
+                    <i class="codicon codicon-settings-gear"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Primary Side Bar -->
+        <div id="sidebar">
+            <!-- Sidebar: Explorer -->
+            <div class="sidebar-pane active" id="pane-explorer">
+                <div class="pane-header">
+                    <span class="pane-title">EXPLORER</span>
+                    <div class="pane-actions">
+                        <button class="icon-btn" id="btn-new-file" title="New File"><i class="codicon codicon-new-file"></i></button>
+                        <button class="icon-btn" id="btn-new-folder" title="New Folder"><i class="codicon codicon-new-folder"></i></button>
+                        <button class="icon-btn" id="btn-refresh-files" title="Refresh Explorer"><i class="codicon codicon-refresh"></i></button>
+                        <button class="icon-btn" id="btn-collapse-folders" title="Collapse All"><i class="codicon codicon-collapse-all"></i></button>
+                    </div>
+                </div>
+                <div class="section-title">
+                    <i class="codicon codicon-chevron-down"></i>
+                    <span class="section-name">THE-THINKER</span>
+                </div>
+                <div id="file-tree" class="file-tree">
+                    <!-- Dynamic File Tree -->
+                </div>
+            </div>
+
+            <!-- Sidebar: Search -->
+            <div class="sidebar-pane" id="pane-search">
+                <div class="pane-header">
+                    <span class="pane-title">SEARCH</span>
+                </div>
+                <div class="search-box-container">
+                    <div class="input-with-tools">
+                        <input type="text" id="search-input" placeholder="Search" />
+                        <div class="search-options">
+                            <button class="search-opt-btn" id="opt-match-case" title="Match Case (Alt+C)">Aa</button>
+                            <button class="search-opt-btn" id="opt-regex" title="Use Regular Expression (Alt+R)">.*</button>
+                        </div>
+                    </div>
+                    <div class="input-with-tools" style="margin-top: 6px;">
+                        <input type="text" id="replace-input" placeholder="Replace" />
+                        <button class="search-opt-btn" id="btn-replace-all" title="Replace All in Search Results"><i class="codicon codicon-replace-all"></i></button>
+                    </div>
+                </div>
+                <div class="search-results-summary" id="search-summary"></div>
+                <div id="search-results" class="search-results-list"></div>
+            </div>
+
+            <!-- Sidebar: Source Control (Git) -->
+            <div class="sidebar-pane" id="pane-scm">
+                <div class="pane-header">
+                    <span class="pane-title">SOURCE CONTROL</span>
+                    <div class="pane-actions">
+                        <button class="icon-btn" id="btn-git-refresh" title="Refresh Git"><i class="codicon codicon-refresh"></i></button>
+                    </div>
+                </div>
+                <div class="scm-commit-box">
+                    <textarea id="git-commit-msg" placeholder="Message (Ctrl+Enter to commit)"></textarea>
+                    <button class="btn-primary" id="btn-git-commit"><i class="codicon codicon-check"></i> Commit</button>
+                </div>
+                <div class="section-title">
+                    <i class="codicon codicon-chevron-down"></i>
+                    <span class="section-name">CHANGES</span>
+                    <span class="scm-count" id="scm-changes-count">0</span>
+                </div>
+                <div id="scm-files-list" class="scm-files-list"></div>
+            </div>
+
+            <!-- Sidebar: Run and Debug -->
+            <div class="sidebar-pane" id="pane-run">
+                <div class="pane-header">
+                    <span class="pane-title">RUN AND DEBUG</span>
+                </div>
+                <div class="run-debug-content">
+                    <div class="run-buttons">
+                        <button class="btn-primary" id="btn-run-project"><i class="codicon codicon-play"></i> Run Current File (Node/Python)</button>
+                    </div>
+                    <div class="section-title" style="margin-top:16px;">
+                        <i class="codicon codicon-chevron-down"></i>
+                        <span class="section-name">OUTPUT & EXECUTION</span>
+                    </div>
+                    <div id="run-output" class="run-output-area">Press "Run Current File" or F5 to execute script...</div>
+                </div>
+            </div>
+
+            <!-- Sidebar: Extensions -->
+            <div class="sidebar-pane" id="pane-extensions">
+                <div class="pane-header">
+                    <span class="pane-title">EXTENSIONS</span>
+                </div>
+                <div class="search-box-container">
+                    <input type="text" id="ext-search-input" placeholder="Search Extensions in Marketplace..." />
+                </div>
+                <div class="extensions-list" id="extensions-list">
+                    <!-- Built-in Installed Extensions -->
+                </div>
+            </div>
+        </div>
+
+        <div class="resizer-horizontal" id="resizer-sidebar"></div>
+
+        <!-- Editor Area (Center) -->
+        <main id="editor-area">
+            <!-- Tabs Bar -->
+            <div id="tabs-bar">
+                <div id="tabs-container"></div>
+                <div class="tabs-actions">
+                    <button class="icon-btn" id="btn-tab-split" title="Split Editor Right"><i class="codicon codicon-split-horizontal"></i></button>
+                    <button class="icon-btn" id="btn-tab-more" title="More Actions..."><i class="codicon codicon-ellipsis"></i></button>
+                </div>
+            </div>
+
+            <!-- Breadcrumbs -->
+            <div id="breadcrumbs">
+                <span class="codicon codicon-folder"></span>
+                <span id="breadcrumb-path">The-thinker</span>
+            </div>
+
+            <!-- Editor Wrapper -->
+            <div id="editor-wrapper">
+                <div id="monaco-container"></div>
+                <!-- Welcome / Empty tab splash -->
+                <div id="welcome-view" class="welcome-view">
+                    <div class="welcome-hero">
+                        <div class="welcome-logo codicon codicon-vscode"></div>
+                        <h1>Visual Studio Code</h1>
+                        <p class="welcome-subtitle">Editing evolved • Web Version</p>
+                    </div>
+                    <div class="welcome-grid">
+                        <div class="welcome-col">
+                            <h3>Start</h3>
+                            <a href="#" id="welcome-new-file"><i class="codicon codicon-new-file"></i> New File...</a>
+                            <a href="#" id="welcome-open-folder"><i class="codicon codicon-folder-opened"></i> Open The-thinker Folder</a>
+                            <a href="#" id="welcome-quick-open"><i class="codicon codicon-search"></i> Quick Open (Ctrl+P)</a>
+                        </div>
+                        <div class="welcome-col">
+                            <h3>Recent Files</h3>
+                            <div id="recent-files-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resizer-vertical" id="resizer-terminal"></div>
+
+            <!-- Bottom Panel (Terminal / Output / Problems) -->
+            <section id="panel-area">
+                <div class="panel-header">
+                    <div class="panel-tabs">
+                        <div class="panel-tab" data-panel="problems">PROBLEMS <span class="badge" id="problems-count">0</span></div>
+                        <div class="panel-tab" data-panel="output">OUTPUT</div>
+                        <div class="panel-tab active" data-panel="terminal">TERMINAL</div>
+                    </div>
+                    <div class="panel-actions">
+                        <button class="icon-btn" id="btn-terminal-clear" title="Clear Terminal"><i class="codicon codicon-clear-all"></i></button>
+                        <button class="icon-btn" id="btn-terminal-new" title="New Terminal"><i class="codicon codicon-plus"></i></button>
+                        <button class="icon-btn" id="btn-terminal-maximize" title="Maximize Panel Size"><i class="codicon codicon-chevron-up"></i></button>
+                        <button class="icon-btn" id="btn-terminal-close" title="Close Panel"><i class="codicon codicon-close"></i></button>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="panel-view" id="view-problems">
+                        <div class="empty-panel-msg">No problems have been detected in the workspace.</div>
+                    </div>
+                    <div class="panel-view" id="view-output">
+                        <pre id="output-console-log">[Visual Studio Code Web Initialized]
+Connected to workspace /home/user/The-thinker
+All features ready.</pre>
+                    </div>
+                    <div class="panel-view active" id="view-terminal">
+                        <div id="terminal-container"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Status Bar (Bottom) -->
+    <footer id="statusbar">
+        <div class="status-left">
+            <div class="status-item remote-badge" title="Connected to Local Machine Sandbox"><i class="codicon codicon-remote"></i> WSL/Host</div>
+            <div class="status-item" id="status-git-branch" title="Git Branch"><i class="codicon codicon-git-branch"></i> <span id="status-branch-name">main</span></div>
+            <div class="status-item" id="status-git-sync" title="Sync Changes"><i class="codicon codicon-sync"></i> 0↓ 0↑</div>
+            <div class="status-item" title="Errors and Warnings"><i class="codicon codicon-error"></i> 0  <i class="codicon codicon-warning"></i> 0</div>
+        </div>
+        <div class="status-right">
+            <div class="status-item" id="status-cursor-pos">Ln 1, Col 1</div>
+            <div class="status-item" id="status-spaces">Spaces: 4</div>
+            <div class="status-item" id="status-encoding">UTF-8</div>
+            <div class="status-item" id="status-eol">LF</div>
+            <div class="status-item" id="status-language">JavaScript</div>
+            <div class="status-item" id="status-theme-toggle" title="Switch Theme"><i class="codicon codicon-color-mode"></i> Theme</div>
+            <div class="status-item" id="status-notifications" title="Notifications"><i class="codicon codicon-bell"></i></div>
+        </div>
+    </footer>
+
+    <!-- Command Palette & Quick Open Modal -->
+    <div id="palette-modal" class="modal-overlay" style="display:none;">
+        <div class="palette-container">
+            <div class="palette-input-wrapper">
+                <span class="codicon codicon-search" id="palette-icon"></span>
+                <input type="text" id="palette-input" placeholder="Type a command or search files..." autofocus />
+            </div>
+            <div class="palette-list" id="palette-list">
+                <!-- Dynamic Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="context-menu" class="context-menu" style="display:none;">
+        <!-- Dynamic context items -->
+    </div>
+
+    <!-- Settings Dialog -->
+    <div id="settings-modal" class="modal-overlay" style="display:none;">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button class="icon-btn" id="btn-close-settings"><i class="codicon codicon-close"></i></button>
+            </div>
+            <div class="settings-body">
+                <div class="settings-row">
+                    <label>Color Theme:</label>
+                    <select id="setting-theme">
+                        <option value="vs-dark">Dark+ (default dark)</option>
+                        <option value="vs">Light+ (default light)</option>
+                        <option value="hc-black">High Contrast Dark</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <label>Font Size:</label>
+                    <input type="number" id="setting-font-size" value="14" min="10" max="32" />
+                </div>
+                <div class="settings-row">
+                    <label>Tab Size:</label>
+                    <input type="number" id="setting-tab-size" value="4" min="1" max="8" />
+                </div>
+                <div class="settings-row">
+                    <label>Word Wrap:</label>
+                    <select id="setting-word-wrap">
+                        <option value="on">on</option>
+                        <option value="off">off</option>
+                        <option value="wordWrapColumn">wordWrapColumn</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <label>Minimap:</label>
+                    <input type="checkbox" id="setting-minimap" checked />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div id="shortcuts-modal" class="modal-overlay" style="display:none;">
+        <div class="shortcuts-container">
+            <div class="settings-header">
+                <h2>Keyboard Shortcuts</h2>
+                <button class="icon-btn" id="btn-close-shortcuts"><i class="codicon codicon-close"></i></button>
+            </div>
+            <div class="shortcuts-list">
+                <div class="shortcut-item"><span>Command Palette</span><kbd>Ctrl+Shift+P</kbd></div>
+                <div class="shortcut-item"><span>Quick Open (Go to File)</span><kbd>Ctrl+P</kbd></div>
+                <div class="shortcut-item"><span>Save Current File</span><kbd>Ctrl+S</kbd></div>
+                <div class="shortcut-item"><span>Close Current Tab</span><kbd>Ctrl+W</kbd></div>
+                <div class="shortcut-item"><span>Toggle Primary Side Bar</span><kbd>Ctrl+B</kbd></div>
+                <div class="shortcut-item"><span>Toggle Integrated Terminal</span><kbd>Ctrl+`</kbd></div>
+                <div class="shortcut-item"><span>Find in File</span><kbd>Ctrl+F</kbd></div>
+                <div class="shortcut-item"><span>Replace in File</span><kbd>Ctrl+H</kbd></div>
+                <div class="shortcut-item"><span>Global Search</span><kbd>Ctrl+Shift+F</kbd></div>
+                <div class="shortcut-item"><span>Run Active Code</span><kbd>F5</kbd></div>
+                <div class="shortcut-item"><span>Format Document</span><kbd>Shift+Alt+F</kbd></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/vendor/monaco/vs/loader.js"></script>
+    <script src="/vendor/xterm/lib/xterm.js"></script>
+    <script src="/vendor/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
